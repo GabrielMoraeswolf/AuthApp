@@ -1,0 +1,131 @@
+<div class="register-container">
+  <div class="register-card">
+    <h2>Cadastro de Usuários</h2>
+
+    @if (!showForm) {
+      <div>
+        <div class="table-container">
+          <table class="users-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Login</th>
+                <th>Nome Completo</th>
+                <th>Email</th>
+                <th>Acessos</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (usuario of usuarios; track usuario.id) {
+                <tr>
+                  <td>{{ usuario.id }}</td>
+                  <td>{{ usuario.login }}</td>
+                  <td>{{ usuario.nomeCompleto }}</td>
+                  <td>{{ usuario.email }}</td>
+                  <td>{{ usuario.acessos }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5" style="text-align: center;">Nenhum usuário cadastrado</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="actions">
+          <button (click)="mostrarFormulario()" class="btn btn-primary">
+            Novo Cadastro
+          </button>
+          <button (click)="voltarParaLogin()" class="btn btn-secondary">
+            Voltar para Login
+          </button>
+        </div>
+      </div>
+    }
+
+    @if (showForm) {
+      <div class="form-container">
+        <h3>Novo Usuário</h3>
+        
+        <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+          <div class="form-group">
+            <label for="login">Login:</label>
+            <input
+              type="text"
+              id="login"
+              name="login"
+              [(ngModel)]="novoUsuario.login"
+              required
+              class="form-control"
+              placeholder="Digite o login">
+          </div>
+
+          <div class="form-group">
+            <label for="nomeCompleto">Nome Completo:</label>
+            <input
+              type="text"
+              id="nomeCompleto"
+              name="nomeCompleto"
+              [(ngModel)]="novoUsuario.nomeCompleto"
+              required
+              class="form-control"
+              placeholder="Digite o nome completo">
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              [(ngModel)]="novoUsuario.email"
+              required
+              class="form-control"
+              placeholder="Digite o email">
+          </div>
+
+          <div class="form-group">
+            <label for="senha">Senha:</label>
+            <input
+              type="password"
+              id="senha"
+              name="senha"
+              [(ngModel)]="novoUsuario.senha"
+              required
+              minlength="6"
+              class="form-control"
+              placeholder="Digite a senha (mínimo 6 caracteres)">
+          </div>
+
+          @if (errorMessage) {
+            <div class="alert alert-error">
+              {{ errorMessage }}
+            </div>
+          }
+
+          @if (successMessage) {
+            <div class="alert alert-success">
+              {{ successMessage }}
+            </div>
+          }
+
+          <div class="form-actions">
+            <button 
+              type="submit" 
+              class="btn btn-primary" 
+              [disabled]="loading">
+              {{ loading ? 'Cadastrando...' : 'Cadastrar' }}
+            </button>
+            <button 
+              type="button" 
+              (click)="cancelarCadastro()" 
+              class="btn btn-secondary">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    }
+  </div>
+</div>
